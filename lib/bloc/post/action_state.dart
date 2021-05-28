@@ -5,36 +5,55 @@ part of 'post_bloc.dart';
 
 abstract class PostStates extends Equatable{
 
+
 }
 
-enum PostStatus { initial, success, failure }
+// enum PostStatus { initial, success, failure }
 
+class StateInitial extends PostStates{
+  final GitHubRespone data;
+  final String currentSearchItem;
+  final List<GitHubRespone> items;
+  final bool hasReachedMax;
+  // List<Hits> favourites = [];
+
+
+  StateInitial({ this.data, this.items, this.currentSearchItem, this.hasReachedMax});
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+
+}
 
 
 class ApiLoaded extends PostStates{
 
   final GitHubRespone data;
-  final List items;
-  List<Hits> favourites = [];
+
+  final List<GitHubRespone> items;
+  final bool hasReachedMax;
+  // List<Hits> favourites = [];
 
 
-  ApiLoaded({@required this.data, this.items, this.favourites});
+  ApiLoaded({ this.data, this.items, this.hasReachedMax});
 
-  static ApiLoaded initialState() => ApiLoaded(data: null, items: [],favourites: []);
+  // static ApiLoaded initialState() => ApiLoaded(data: null, items: [],favourites: [], currentSearchItem: null);
 
   ApiLoaded copyWith({
   GitHubRespone data,
-    List items,
-    List<Hits> favourites
+    List<GitHubRespone> items,
+    // List<Hits> favourites
 }) {
     return ApiLoaded(data: data ?? this.data,
     items: items ?? this.items,
-    favourites: favourites ?? this.favourites);
+    hasReachedMax: hasReachedMax ?? this.hasReachedMax
+    // favourites: favourites ?? this.favourites
+    );
   }
 
   @override
   // TODO: implement props
-  List<Object> get props => [data, favourites];
+  List<Object> get props => [data, hasReachedMax];
 
 }
 
@@ -58,7 +77,7 @@ class ApiLoading extends PostStates{
 }
 class ApiFailure extends PostStates{
 
-  String message;
+  final String message;
 
   ApiFailure({@required this.message});
 
@@ -78,7 +97,7 @@ class AddedToFavorites extends PostStates{
 
   final GitHubRespone items;
 
-  List hits = [];
+  final List hits;
 
   AddedToFavorites({@required this.hits, this.items});
 

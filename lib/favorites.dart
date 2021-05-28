@@ -1,7 +1,7 @@
-import 'package:aman_test/post_bloc.dart';
-import 'package:aman_test/repositories/post_repository.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/favorites_bloc/favorites_bloc.dart';
 
 class FavoritesScreen extends StatefulWidget {
   static String id = 'favorites_screen';
@@ -22,20 +22,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           'SecondPage favourites'
         ),
       ),
-      body: BlocBuilder<PostBloc, PostStates>(
+      body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
-          if (state is FavouritesLoading) {
-            return CircularProgressIndicator();
-          }
-         else  if (state is ApiLoaded) {
+
+          if (state is Favorites) {
             // print('favourites screen ${state.data}');
             // print('favourites screen ${state.favourites[0].recipe.label}');
-            for (var i = 0; i < state.favourites.length; i++)
-              {
-                print(
-                  'favourites screen ${state.favourites[i].recipe.label}'
-                );
-              }
             if (state.favourites != null) {
               return ListView.builder(
                   itemCount: state.favourites.length,
@@ -50,22 +42,35 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(onPressed:
-                            () {
-                              BlocProvider.of<PostBloc>(context).add(RemoveFromFavourites(hits: state.favourites[i]));
+                                () {
+                              BlocProvider.of<FavoritesBloc>(context).add(
+                                  RemoveFromFavourites(
+                                      hits: state.favourites[i]));
                             }
                                 , child: Text(
-                              'remove from favourites'
-                            )),
+                                    'remove from favourites'
+                                )),
 
                             Text(state.favourites[i].recipe.label),
-                            Expanded(child: Image.network(state.favourites[i].recipe.image))
+                            Expanded(child: Image.network(
+                                state.favourites[i].recipe.image))
                           ],
                         ),
                       ),
                     );
                   });
-
             }
+            // } else {
+            //   return Container(
+            //     child: Column(
+            //       children: [
+            //         Text(
+            //           'Вы ничего не добавили в избранное'
+            //         )
+            //       ],
+            //     ),
+            //   );
+            // }
 
 
           }

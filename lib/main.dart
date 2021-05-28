@@ -1,18 +1,14 @@
-import 'package:aman_test/post_bloc.dart';
-import 'package:aman_test/postsList.dart';
+import 'package:aman_test/bloc/favorites_bloc/favorites_bloc.dart';
+import 'package:aman_test/bloc/post/post_bloc.dart';
 import 'package:aman_test/repositories/post_repository.dart';
-import 'package:flutter/foundation.dart';
+import 'package:aman_test/showInfo.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'favorites.dart';
 import 'main_page.dart';
-import 'bloc_widgets.dart';
 
-import 'bloc.dart';
-// import 'actionEvent.dart';
+
+
 
 
 void main() {
@@ -27,30 +23,34 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final FavoritesBloc _favoritesBloc = FavoritesBloc();
   final PostBloc _postBloc = PostBloc(
       repository: ApiRepositoryImplementation());
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      initialRoute: MainPage.id,
-      routes: {
-        MainPage.id: (context) =>
-            BlocProvider.value(value: _postBloc,
-              child: MainPage(),),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PostBloc>(create: (context) => _postBloc),
+        BlocProvider<FavoritesBloc>(create: (context) => _favoritesBloc)
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        initialRoute: MainPage.id,
+        routes: {
+          MainPage.id: (context) => MainPage(),
+          ShowInfo.id: (context) => ShowInfo(),
+          FavoritesScreen.id: (_) => FavoritesScreen(),
+              // BlocProvider.value(value: _postBloc,
+              //   child: FavoritesScreen(),
+              // )
+        },
+        theme: ThemeData(
 
-        FavoritesScreen.id: (_) => BlocProvider.value(value: _postBloc,
-    child: FavoritesScreen(),)
-            // BlocProvider.value(value: _postBloc,
-            //   child: FavoritesScreen(),
-            // )
-      },
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
+          primarySwatch: Colors.blue,
+        ),
+        home: MainPage(),
       ),
-      home: MainPage(),
     );
   }
 

@@ -4,7 +4,7 @@ import 'dart:convert';
 
 
 abstract class ApiRepositoryInterface {
-  Future <GitHubRespone> getData();
+  Future <GitHubRespone> getData(String data, int from ,int to);
 }
 
 class ApiRepositoryImplementation implements ApiRepositoryInterface{
@@ -12,8 +12,6 @@ class ApiRepositoryImplementation implements ApiRepositoryInterface{
   static const _APP_ID = 'd5fd1cb9';
   static const _APP_KEY = 'd4be5788cb0ab6aa1249764f362b8fb9';
 
-
-  String _searchItems;
 
 
 
@@ -23,14 +21,14 @@ class ApiRepositoryImplementation implements ApiRepositoryInterface{
 
 
   @override
-  Future <GitHubRespone> getData() async {
+  Future <GitHubRespone> getData(String recipe, int from, int to) async {
 
 
     http.Response response = await http.get(
         // Uri.https('api.github.com', '/repos/octocat/hello-world'));
         Uri.https('api.edamam.com', '/search',
             {
-              'q': 'chicken',
+              'q': recipe,
               'app_id': _APP_ID,
               'app_key': _APP_KEY,
               'from': _from.toString(),
@@ -43,12 +41,12 @@ class ApiRepositoryImplementation implements ApiRepositoryInterface{
       GitHubRespone apiStream = GitHubRespone.fromJson(decodedData);
 
 
-      print(decodedData);
-      print('Api stream are + $apiStream');
+      // print(decodedData);
+      // print('Api stream are + $apiStream');
 
       return apiStream;
     } else {
-      print('Error');
+      // print('Error');
       throw Exception();
     }
 

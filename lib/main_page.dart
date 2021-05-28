@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bloc_widgets.dart';
+import 'favorites.dart';
 
 class MainPage extends StatelessWidget {
   static String id = 'main_page';
@@ -13,7 +14,17 @@ class MainPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           actions: [
-          ],
+            MaterialButton(
+            onPressed: () {
+    Navigator.of(context).pushNamed(FavoritesScreen.id);
+    },
+        child: Text(
+          'Избранное'
+        ),
+            )],
+          title: Text(
+            'BLoC Recipe Search App'
+          )
         ),
         body:
         BlocWidgets()
